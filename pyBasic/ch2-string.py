@@ -23,6 +23,15 @@ print "None as String ", str(None)
 
 print "Find the lenght of name use len()", name, " len ", len(name)
 
+print "Spam " + "and " + "eggs."
+
+my_str1 = "Test1"
+my_str2 = "Test2"
+
+print "Let's not go to %s. 'Tis a silly %s " % (my_str1, my_str2)
+
+
+
 """ To be continue """
 
 # if """ string is not assgined to any variable then it just like comment 
