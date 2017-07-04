@@ -43,3 +43,23 @@ else:
     print "You win!"
 
 
+
+"""
+print with out end line,
+swap A or a with X
+"""
+
+phrase = "A bird in the hand..."
+
+# Add your for loop
+for w in phrase:
+    if w == "A" or w == "a":
+        print "X",
+    else:
+        print w,
+
+
+#Don't delete this print statement!
+print
+
+
