@@ -83,7 +83,7 @@ def register():
         # Create cursor
         cur = mysql.connection.cursor()
         # Execute query
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
+        cur.execute("INSERT INTO user(name, email, username, password, creation_date) VALUES(%s, %s, %s, %s, curdate())", (name, email, username, password))
         # Commit to DB
         mysql.connection.commit()
         # Close connection
@@ -119,4 +119,5 @@ def idea():
 
 
 if __name__ == "__main__":
+    app.secret_key = 'secret123'
     app.run()
