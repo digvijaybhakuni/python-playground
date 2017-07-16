@@ -1,0 +1,11 @@
+{% extends 'layout/base_layout.html' %} {% block content %}
+<section class="main-content">
+    <div class="container">
+        <div class="col-12">
+            <h2>{{post.title | upper }}</h2>
+            <small>{{post.author}} | {{post.create_date | date_format}}</small>
+            <p>{{post.body}}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
