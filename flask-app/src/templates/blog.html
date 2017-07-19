@@ -10,8 +10,9 @@
         {% for post in posts %}
         <div class="col-12">
             <h2>{{post.title | uppar }}</h2>
-            <p>{{post.body | trimed(500) }}</p>
+            <p class="text-muted">{{post.body | trimed(500) }}</p>
             <p><a class="btn btn-default pull-right" href="/blog/post/{{post.id}}" role="button">Read more »</a></p>
+            <div class="clearfix">...</div>
         </div>
         {% endfor %}
     </div>

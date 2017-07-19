@@ -1,4 +1,4 @@
-from flask import Flask, render_template, render_template_string, request, sessions, redirect, url_for, logging, flash
+from flask import Flask, render_template, render_template_string, request, session, redirect, url_for, logging, flash
 from data import posts
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
@@ -38,9 +38,24 @@ def date_format(d):
         return d.strftime("%A %d. %B %Y")
     return d
 
+# Check if user logged in
+
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return  f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for("login"))
+    return wrap
+
+
+
 # App Routes
 # Index
 @app.route("/")
+@app.route("/index")
 def index():
     return render_template("index.html")
 
@@ -48,7 +63,7 @@ def index():
 @app.route("/blog")
 def blog():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM posts ")
+    result = cur.execute("SELECT id, title, left(body, 500) as body, author, create_date FROM posts ")
     postsDB = cur.fetchall()
     return render_template("blog.html", posts=postsDB)
 
@@ -95,9 +110,55 @@ def register():
     return render_template('register.html', form=reg_form)
 
 # /login
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    if request.method == "POST":
+        loginId = request.form['loginId']
+        inputPassword = request.form['passwordInput']
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute Query
+        result = cur.execute("SELECT * FROM user  WHERE username = %s", [loginId])
+
+        if result > 0:
+            # Fetching Data
+            user = cur.fetchone()
+            password = user['password']
+
+            if sha256_crypt.verify(inputPassword, password):
+                session['logged_in'] = True
+                session['username'] = loginId
+
+                flash('You are now logged in', 'success')
+
+                return redirect(url_for('dashboard'))
+            else:
+                error = 'Invalid login'
+                return render_template('login.html', error=error)
+        else:
+            error = 'Username not found'
+            return render_template('login.html', error=error)
+
+        mysql.connection.commit()
+        cur.close()
     return render_template("login.html")
+
+# Dashboard Route
+@app.route("/dashboard")
+@is_logged_in
+def dashboard():
+    return render_template("dashboard.html")
+
+# logout Route
+@app.route("/logout")
+@is_logged_in
+def logout():
+    session.clear()
+    flash("Logout Susscess", "info")
+    return redirect(url_for("index"))
+
 
 
 # Tests routes
