@@ -1,8 +1,18 @@
 {% extends 'layout/base_layout.html' %} {% block content %}
 <section class="form">
     <div class="container">
-        <h1>Dashboard</h1>
-        {% from "includes/_formhelpers.html" import render_field %}
+        <div class="row">
+            <h1 class="pull-left">Dashboard</h1>
+            <a class="btn btn-info pull-right" href="/dashboard/add_post">Add Post</a>
+            <div class="clearfix"></div>
+        </div>
+
+
+        <div class="row">
+            {% if add_post %}
+                {% include 'includes/_add_post.html' %}
+            {% endif %}
+        </div>
     </div>
 </section>
 {% endblock %}

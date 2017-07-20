@@ -3,7 +3,7 @@ from data import posts
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 from datetime import date
-from forms import RegisterForm
+from forms import RegisterForm, PostForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -130,6 +130,7 @@ def login():
             if sha256_crypt.verify(inputPassword, password):
                 session['logged_in'] = True
                 session['username'] = loginId
+                session['name'] = user['name']
 
                 flash('You are now logged in', 'success')
 
@@ -146,10 +147,33 @@ def login():
     return render_template("login.html")
 
 # Dashboard Route
-@app.route("/dashboard")
 @is_logged_in
+@app.route("/dashboard")
 def dashboard():
+
     return render_template("dashboard.html")
+
+
+# Add Post Route
+@is_logged_in
+@app.route("/dashboard/add_post", methods=['GET', 'POST'])
+def add_post():
+    post_form = PostForm(request.form)
+    if request.method ==  "POST" and post_form.validate():
+        title = post_form.title.data
+        body = post_form.body.data
+        author = session['name']
+        # Create Cursor
+        cur = mysql.connection.cursor()
+        # Interting POST
+        cur.execute("INSERT INTO posts(title, body, author, create_date) VALUES(%s, %s, %s, curdate())", (title, body, author))
+        # Commiting Transcation
+        mysql.connection.commit()
+        # Close Cursor
+        cur.close()
+        flash("Post Saved", "info")
+        return redirect(url_for("dashboard"))
+    return render_template("dashboard.html", form=post_form, add_post=True)
 
 # logout Route
 @app.route("/logout")
