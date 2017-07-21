@@ -42,3 +42,9 @@ CREATE DATABASE `FlaskBookStore`;
  ALTER TABLE `posts` ADD `author` VARCHAR(20)  NOT NULL  DEFAULT ''  AFTER `body`;
  ALTER TABLE `posts` ADD `create_date` DATE  NOT NULL  AFTER `author`;
  ```
+
+## TODO 
+ - Add Cookie base authentication (try to use JWT)
+ - Implement Store Book.
+
+

@@ -63,7 +63,7 @@ def index():
 @app.route("/blog")
 def blog():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT id, title, left(body, 500) as body, author, create_date FROM posts ")
+    result = cur.execute("SELECT id, title, left(body, 500) as body, author, create_date FROM posts order by id DESC")
     postsDB = cur.fetchall()
     return render_template("blog.html", posts=postsDB)
 
