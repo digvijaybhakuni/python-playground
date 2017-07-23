@@ -1,0 +1,33 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>#Id</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Date</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in post_list %}
+    <tr>
+        <td><a href="/blog/post/{{post.id}}">{{post.id}}</a></td>
+        <td>{{post.title}}</td>
+        <td>{{post.body | safe}}</td>
+        <td>{{post.create_date | date_format}}</td>
+        <td>
+            <a href="/dashboard/edit_post/{{post.id}}" class="btn btn-default">Edit</a>
+        </td>
+        <td>
+            <form action="/dashboard/delete_post/{{post.id}}" method="POST">
+                <input type="hidden" name="_delete_id" value="{{post.id}}">
+                <button type="submit" class="btn btn-danger" aria-label="Close">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

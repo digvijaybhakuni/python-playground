@@ -1,16 +1,24 @@
 {% extends 'layout/base_layout.html' %} {% block content %}
 <section class="form">
     <div class="container">
-        <div class="row">
+        <div class="row" style="vertical-align: middle;">
             <h1 class="pull-left">Dashboard</h1>
             <a class="btn btn-info pull-right" href="/dashboard/add_post">Add Post</a>
             <div class="clearfix"></div>
+            <hr/>
         </div>
 
+        <div class="row">
+            {% if post_list %}
+                {% include 'includes/_list_post.html' %}
+            {% endif %}
+        </div>
 
         <div class="row">
             {% if add_post %}
-                {% include 'includes/_add_post.html' %}
+                {% include 'includes/_post_form.html' %}
+            {% elif edit_post %}
+                {% include 'includes/_post_form.html' %}
             {% endif %}
         </div>
     </div>

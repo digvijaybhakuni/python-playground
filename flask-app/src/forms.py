@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from wtforms import Form, StringField, TextAreaField, PasswordField, HiddenField, validators
 
 # Register Form Class
 class RegisterForm(Form):
@@ -13,5 +13,6 @@ class RegisterForm(Form):
 
 # Post Form Class
 class PostForm(Form):
+    id = HiddenField("id")
     title = StringField('Title', [validators.Length(min=1, max=50)])
     body = TextAreaField('Body', [validators.Length(min=30)])

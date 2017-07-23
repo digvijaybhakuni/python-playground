@@ -151,7 +151,18 @@ def login():
 @app.route("/dashboard")
 def dashboard():
 
-    return render_template("dashboard.html")
+    author = session['name']
+    # Create Cursor
+    cur = mysql.connection.cursor()
+    # Execute Query
+    res = cur.execute("SELECT id, title, left(body, 50) as body, author, create_date FROM posts WHERE author = %s", [author])
+
+    if res > 0:
+        # Fetch all Post
+        post_list = cur.fetchall()
+        return render_template("dashboard.html", post_list=post_list)
+    else:
+        return render_template("dashboard.html")
 
 
 # Add Post Route
@@ -174,6 +185,53 @@ def add_post():
         flash("Post Saved", "info")
         return redirect(url_for("dashboard"))
     return render_template("dashboard.html", form=post_form, add_post=True)
+
+# Add Edit Route
+@is_logged_in
+@app.route("/dashboard/edit_post/<string:id>", methods=['GET', 'POST'])
+def edit_post(id):
+    post_form = PostForm(request.form)
+    if request.method ==  "POST" and post_form.validate():
+        title = post_form.title.data
+        body = post_form.body.data
+        _id = post_form.id.data
+
+        print "_id", _id
+        # Create Cursor
+        cur = mysql.connection.cursor()
+        # Interting POST
+        cur.execute("UPDATE posts SET title = %s, body = %s WHERE id = %s ", (title, body, _id))
+        # Commiting Transcation
+        mysql.connection.commit()
+        # Close Cursor
+        cur.close()
+        flash("Post Updated", "info")
+        return redirect(url_for("dashboard"))
+    # Create Cursor
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT * FROM posts WHERE id = %s ", [id])
+    if result > 0:
+        post = cur.fetchone()
+        post_form = PostForm(request.form, id=post['id'], title=post['title'], body=post['body'])
+    return render_template("dashboard.html", form=post_form, edit_post=True)
+
+
+# Delete Post
+@app.route("/dashboard/delete_post/<string:id>", methods=['GET', 'POST'])
+def delete_post(id):
+    print "_id to Delete", id
+    # Create Cursor
+    cur = mysql.connection.cursor()
+    # Interting POST
+    cur.execute("DELETE FROM posts WHERE id = %s ", [id])
+    # Commiting Transcation
+    mysql.connection.commit()
+    # Close Cursor
+    cur.close()
+    flash("Post Delete", "danger")
+    return redirect(url_for("dashboard"))
+
+
 
 # logout Route
 @app.route("/logout")
