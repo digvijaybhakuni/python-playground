@@ -2,9 +2,7 @@
 
 {% block body %} 
     {% include 'includes/_nav-bar.html'%}
-    <div style="margin-top:48px;">
-        {% include 'includes/_messages.html' %}
-        {% block content %} {% endblock %}
-    </div>
+    {% include 'includes/_messages.html' %}
+    {% block content %} {% endblock %}
     {% include 'includes/_footer.html'%}
 {% endblock %}
