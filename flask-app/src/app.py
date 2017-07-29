@@ -26,6 +26,7 @@ mysql = MySQL(app)
 # Filter filter_trimed
 def filter_trimed(s, count=100):
     return s[:count]
+
 app.jinja_env.filters['trimed'] = filter_trimed
 
 @app.template_filter('uppar')
@@ -44,6 +45,7 @@ def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
+            print "session is logged in"
             return  f(*args, **kwargs)
         else:
             flash('Unauthorized, Please login', 'danger')
@@ -147,8 +149,8 @@ def login():
     return render_template("login.html")
 
 # Dashboard Route
-@is_logged_in
 @app.route("/dashboard")
+@is_logged_in
 def dashboard():
 
     author = session['name']
@@ -166,8 +168,9 @@ def dashboard():
 
 
 # Add Post Route
-@is_logged_in
+
 @app.route("/dashboard/add_post", methods=['GET', 'POST'])
+@is_logged_in
 def add_post():
     post_form = PostForm(request.form)
     if request.method ==  "POST" and post_form.validate():
@@ -187,8 +190,8 @@ def add_post():
     return render_template("dashboard.html", form=post_form, add_post=True)
 
 # Add Edit Route
-@is_logged_in
 @app.route("/dashboard/edit_post/<string:id>", methods=['GET', 'POST'])
+@is_logged_in
 def edit_post(id):
     post_form = PostForm(request.form)
     if request.method ==  "POST" and post_form.validate():
@@ -217,7 +220,8 @@ def edit_post(id):
 
 
 # Delete Post
-@app.route("/dashboard/delete_post/<string:id>", methods=['GET', 'POST'])
+@app.route("/dashboard/delete_post/<string:id>", methods=['POST'])
+@is_logged_in
 def delete_post(id):
     print "_id to Delete", id
     # Create Cursor
