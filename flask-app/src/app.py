@@ -3,7 +3,7 @@ from data import posts
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 from datetime import date
-from forms import RegisterForm, PostForm
+from forms import RegisterForm, PostForm, ContactForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -80,14 +80,33 @@ def post(id):
 # /about
 @app.route("/about")
 def about():
-    return render_template("index.html")
+    return render_template("about.html")
 
 # /about
-@app.route("/contact")
+@app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    return render_template("index.html")
+    contact_form = ContactForm(request.form)
+    if request.method == 'POST' and contact_form.validate():
 
-# /register
+        name = contact_form.name.data
+        email = contact_form.email.data
+        company = contact_form.company.data
+        notes = contact_form.notes.data
+
+        # Create Connection
+        cur = mysql.connection.cursor()
+
+        # Insert Data
+        res = cur.execute("INSERT INTO contacts(id, name, company, email, note) values(null, %s, %s, %s, %s)", (name, company, email, notes))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        flash("Thanks you submitting contact", "info")
+        contact_form = ContactForm(formdata=None)
+    return render_template("contact.html", form=contact_form)
+
+# Add Route register
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     reg_form = RegisterForm(request.form)
@@ -168,7 +187,6 @@ def dashboard():
 
 
 # Add Post Route
-
 @app.route("/dashboard/add_post", methods=['GET', 'POST'])
 @is_logged_in
 def add_post():

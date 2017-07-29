@@ -16,3 +16,11 @@ class PostForm(Form):
     id = HiddenField("id")
     title = StringField('Title', [validators.Length(min=1, max=50)])
     body = TextAreaField('Body', [validators.Length(min=30)])
+
+
+class ContactForm(Form):
+    id = HiddenField("id")
+    name = StringField("Name", [validators.Length(min=4, max=50)])
+    company = StringField("Company", [validators.Length(min=4, max=50)])
+    email = StringField("Email", [validators.Length(min=4, max=50)])
+    notes = TextAreaField("Notes")

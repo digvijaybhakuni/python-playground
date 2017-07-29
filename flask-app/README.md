@@ -43,6 +43,20 @@ CREATE DATABASE `FlaskBookStore`;
  ALTER TABLE `posts` ADD `create_date` DATE  NOT NULL  AFTER `author`;
  ```
 
+### Contacts table create log 
+```sql
+
+CREATE TABLE contacts (
+    id INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL DEFAULT '',
+    company VARCHAR(50) NOT NULL DEFAULT '',
+    email VARCHAR(50) NOT NULL DEFAULT '',
+    note VARCHAR(500)
+    )
+
+```
+
+
 ## TODO 
  - Add Cookie base authentication (try to use JWT)
  - Implement Store Book.

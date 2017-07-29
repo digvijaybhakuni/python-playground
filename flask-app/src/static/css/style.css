@@ -1,9 +1,42 @@
-body {
-    margin-top: 54px;
+html {
     height: 100%;
 }
 
+body {
+    margin-top: 50px;
+    height: 100%;
+}
 
 #dashboard a.btn.pull-right{
     margin-top: 20px;
+}
+
+.app-page-header{
+    background-color: #eee;
+    margin-bottom: 24px;
+}
+
+#contact-section {
+    background: #fff;
+}
+
+#section-ribbon .glyphicon{
+    font-size: 48px;
+}
+
+#section-ribbon {
+    padding: 24px 0; 
+}
+
+#section-content{
+    margin-top: 10px;
+}
+
+#section-content .media-object{
+    height: 64px;
+    width: 64px;
+}
+
+.bg-eee{
+    background-color: #eee;
 }
