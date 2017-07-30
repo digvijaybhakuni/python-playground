@@ -1,8 +1,8 @@
-{% extends 'layout/base.html' %}
-
-{% block body %} 
-    {% include 'includes/_nav-bar.html'%}
-    {% include 'includes/_messages.html' %}
+{% extends 'layout/base.html' %} {% block body %}
+<div class="wrapper">
+    {% include 'includes/_nav-bar.html'%} 
+    {% include 'includes/_messages.html' %} 
     {% block content %} {% endblock %}
-    {% include 'includes/_footer.html'%}
-{% endblock %}
+    <div class="push"></div>
+</div>
+{% include 'includes/_footer.html'%} {% endblock %}

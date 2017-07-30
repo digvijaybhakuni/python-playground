@@ -97,13 +97,13 @@ def contact():
         cur = mysql.connection.cursor()
 
         # Insert Data
-        res = cur.execute("INSERT INTO contacts(id, name, company, email, note) values(null, %s, %s, %s, %s)", (name, company, email, notes))
+        cur.execute("INSERT INTO contacts(id, name, company, email, note) values(null, %s, %s, %s, %s)", (name, company, email, notes))
 
         # Commit to DB
         mysql.connection.commit()
 
         flash("Thanks you submitting contact", "info")
-        contact_form = ContactForm(formdata=None)
+        return redirect(url_for("contact"))
     return render_template("contact.html", form=contact_form)
 
 # Add Route register
@@ -259,15 +259,23 @@ def delete_post(id):
 @app.route("/logout")
 @is_logged_in
 def logout():
+    # Method to log session out
     session.clear()
     flash("Logout Susscess", "info")
     return redirect(url_for("index"))
 
 
+@app.route("/search")
+def search():
+    return render_template("search.html")
 
-# Tests routes
+
+
+
+#Tests routes
 @app.route("/sample")
 def sample_data():
+    # Sample Methos
     return render_template("sample-data.html", sample_count = range(20))
 
 @app.route("/hello")
