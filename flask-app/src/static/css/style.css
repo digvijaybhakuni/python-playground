@@ -65,6 +65,7 @@ footer.site-footer, .push {
     background-image: url("../img/jumbotron.jpeg");
     background-repeat: no-repeat;
     background-attachment: scroll;
+    background-size: cover;
     background-position: 60% 60%;
     padding: 96px 0;
     margin: 0px;
