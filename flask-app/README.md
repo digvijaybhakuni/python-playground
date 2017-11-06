@@ -24,7 +24,8 @@ CREATE DATABASE `FlaskBookStore`;
 
 ```sql
  CREATE TABLE `user` (id INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT);
- ALTER TABLE `user` ADD `username` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `id`;
+ ALTER TABLE `user` ADD `name` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `id`;
+ ALTER TABLE `user` ADD `username` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `name`;
  ALTER TABLE `user` ADD `email` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `username`;
  ALTER TABLE `user` ADD `password` VARCHAR(100)  NOT NULL  DEFAULT ''  AFTER `email`;
  ALTER TABLE `user` ADD `creation_date` DATE  NOT NULL  AFTER `password`;
@@ -41,7 +42,7 @@ CREATE DATABASE `FlaskBookStore`;
  ALTER TABLE `posts` ADD `body` TEXT  NULL  AFTER `title`;
  ALTER TABLE `posts` ADD `author` VARCHAR(20)  NOT NULL  DEFAULT ''  AFTER `body`;
  ALTER TABLE `posts` ADD `create_date` DATE  NOT NULL  AFTER `author`;
- ```
+```
 
 ### Contacts table create log 
 ```sql
