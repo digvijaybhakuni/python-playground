@@ -5,6 +5,7 @@ from passlib.hash import sha256_crypt
 from datetime import date
 from forms import RegisterForm, PostForm, ContactForm
 from functools import wraps
+import json
 
 app = Flask(__name__)
 
@@ -13,7 +14,7 @@ app.debug = True
 postsCollection = posts()
 
 # MYSQL Connection Properties 
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = '192.168.0.103'
 app.config['MYSQL_USER'] = 'temp'
 app.config['MYSQL_PASSWORD'] = 'temp'
 app.config['MYSQL_DB'] = 'flaskBookStore'
@@ -45,7 +46,7 @@ def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
-            print "session is logged in"
+            print("session is logged in")
             return  f(*args, **kwargs)
         else:
             flash('Unauthorized, Please login', 'danger')
@@ -217,7 +218,7 @@ def edit_post(id):
         body = post_form.body.data
         _id = post_form.id.data
 
-        print "_id", _id
+        print("_id", _id)
         # Create Cursor
         cur = mysql.connection.cursor()
         # Interting POST
@@ -241,7 +242,7 @@ def edit_post(id):
 @app.route("/dashboard/delete_post/<string:id>", methods=['POST'])
 @is_logged_in
 def delete_post(id):
-    print "_id to Delete", id
+    print("_id to Delete", id)
     # Create Cursor
     cur = mysql.connection.cursor()
     # Interting POST
@@ -276,7 +277,7 @@ def search():
 @app.route("/sample")
 def sample_data():
     # Sample Methos
-    return render_template("sample-data.html", sample_count = range(20))
+    return render_template("sample-data.html", sample_count = list(range(20)))
 
 @app.route("/hello")
 def hello():
@@ -289,6 +290,10 @@ def render_html():
 @app.route("/idea")
 def idea():
     return render_template("sample-idea.html")
+
+@app.route("/post-collection")
+def getPostCollection():
+    return json.dump(postsCollection);
 
 
 if __name__ == "__main__":
