@@ -1,4 +1,4 @@
-from flask import Flask, render_template, render_template_string, request, session, redirect, url_for, logging, flash
+from flask import Flask, render_template, render_template_string, request, session, redirect, url_for, logging, flash, jsonify
 from data import posts
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
@@ -268,7 +268,19 @@ def logout():
 
 @app.route("/search")
 def search():
-    return render_template("search.html")
+    print("search request")
+    query = request.args.get('q')
+    print(query)
+    q = "%" + query + "%"
+    sql = "SELECT id, title, left(body, 50) as body, author, create_date FROM posts p WHERE (p.title LIKE %s OR p.body LIKE %s)"
+    cur = mysql.connection.cursor()
+    res = cur.execute(sql, (q, q))
+    print('res lenght ' + str(res))
+    post_list = []
+    if res > 0:
+        post_list = cur.fetchall()
+    print(post_list)
+    return render_template("search.html", post_list=post_list)
 
 
 
@@ -293,7 +305,7 @@ def idea():
 
 @app.route("/post-collection")
 def getPostCollection():
-    return json.dump(postsCollection);
+    return jsonify(postsCollection)
 
 
 if __name__ == "__main__":
