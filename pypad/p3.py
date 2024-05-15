@@ -56,6 +56,8 @@ print(sum_list[:1])  # get fist value
 print(original_list[1:3])  # get between 1 and 2 (include 1, exclude 3)
 print(original_list[2:-1])  # get between 2 and -1 (include 2, exclude -1) -1 repr last
 
+print("sum_list reversed")
+print(sum_list[::-1])
 
 from functools import reduce
 
